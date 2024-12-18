@@ -156,9 +156,9 @@ def signin_page():
         cursor.execute(f"SELECT * FROM `Customer` WHERE `username` = '{username}'")
         result=cursor.fetchone()
 
-        if (result is None): 
+        if result is None: 
             flash("Incorrect Username or Password")
-        elif (result['password']!=password):
+        elif result['password']!=password:
             flash("Incorrect Username or Password")
         else:
             user = User(result['ID'], result['username'], result['email'], result['full_name'])
