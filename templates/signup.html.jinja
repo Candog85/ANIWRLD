@@ -16,7 +16,7 @@
 
     <h1 class="text-center h1 my-5">Sign Up</h1>
 
-    <main class="container col-10 mt-5">
+    <main class="container col-6 mt-5">
 
         {% for message in get_flashed_messages() %}
 
@@ -36,12 +36,12 @@
 
             <div class="my-5">
                 <label for="password" class="form-label h3">Password</label>
-                <input name="password" type="password" class="form-control" id="password">
+                <input name="password" type="password" class="form-control" id="password" required>
             </div>
 
             <div class="my-5">
                 <label for="confirm_password" class="form-label h3">Confirm Password</label>
-                <input name="confirm_password" type="password" class="form-control" id="confirm_password">
+                <input name="confirm_password" type="password" class="form-control" id="confirm_password" required>
             </div>
 
 
