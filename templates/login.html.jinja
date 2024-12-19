@@ -14,19 +14,19 @@
 
 <body>
 
-    <h1 class="text-center h1 my-5">Sign In</h1>
+    {% for message in get_flashed_messages() %}
+
+    <div class="alert alert-primary" role="alert">
+        {{message}}
+    </div>
+
+    {%endfor%}
+
+    <h1 class="text-center h1 my-5">Log In</h1>
 
     <main class="container col-6 mt-5">
 
-        {% for message in get_flashed_messages() %}
-
-        <div class="alert alert-primary" role="alert">
-            {{message}}
-        </div>
-
-        {%endfor%}
-
-        <form action="/signin" method="post" class="text-center">
+        <form action="/login" method="post" class="text-center">
 
             <div class="my-5">
                 <label for="username" class="form-label h3">Username</label>
