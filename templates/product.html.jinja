@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,13 +35,32 @@
                         <p class=>{{product['description']}}</p>
                     </div>
 
-                    <div>
-                        <h2 class="mx-5">${{product['price']}} USD</h2>
+                    <div class="text-center mx-5">
+                        <h2 class="">${{product['price']}} USD</h2>
                     </div>
+
+
+                    <form method="post" action="/product/{{product['product_id']}}/cart">
+
+                        <div class="text-center row">
+
+                            <div class="col-8">
+                                <label for="quantity" class="form-label justify-content-start">Quantity</label>
+                                <input name="quantity" type="number" class="form-control" id="quantity" value="1"
+                                    required>
+                            </div>
+
+
+                            <div class="col-4 align-content-end">
+                                <button type="button" class="btn btn-primary col-12">Add to cart</button>
+                            </div>
+                        </div>
+                    </form>
 
                 </div>
 
             </div>
+
         </div>
     </div>
 

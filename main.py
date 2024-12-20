@@ -16,6 +16,8 @@ login_manager.init_app(app)
 login_manager.login_view = ('/login')
 
 
+
+
 class User:
     is_authenticated = True
     is_anonymous = False
@@ -194,3 +196,26 @@ def logout():
 @flask_login.login_required
 def cart():
     return "THIS IS THE CART PAGE!!!!"
+
+@app.route('/product/<product_id>/cart', methods=["POST"])
+@flask_login.login_required
+def add_cart():
+
+    quantity=request.form['quantity']
+    customer_id=flask_login.current_user.id
+
+    conn=connect_db()
+    cursor= conn.cursor()
+
+    request.path
+
+    cursor.execute(f"""
+    
+    INSERT INTO `Cart` (`customer_id`, `product_id`, `quantity`)
+    VALUES ('{customer_id}', '', '{quantity}')
+    """)
+
+
+
+    return redirect('/cart')
+
