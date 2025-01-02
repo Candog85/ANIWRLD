@@ -195,11 +195,27 @@ def logout():
 @app.route('/cart')
 @flask_login.login_required
 def cart():
-    return "THIS IS THE CART PAGE!!!!"
+    
+    conn=connect_db()
+    cursor=conn.cursor()
+
+    customer_id=flask_login.current_user.id
+
+    cursor.execute(f"""
+
+    SELECT * FROM `Cart` WHERE `customer_id`= {customer_id}
+    """)
+
+    results=cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template("cart.html.jinja", products=results)
 
 @app.route('/product/<product_id>/cart', methods=["POST"])
 @flask_login.login_required
-def add_cart():
+def add_cart(product_id):
 
     quantity=request.form['quantity']
     customer_id=flask_login.current_user.id
@@ -212,10 +228,12 @@ def add_cart():
     cursor.execute(f"""
     
     INSERT INTO `Cart` (`customer_id`, `product_id`, `quantity`)
-    VALUES ('{customer_id}', '', '{quantity}')
+    VALUES ('{customer_id}', '{product_id}', '{quantity}')
     """)
 
+    results=cursor.fetchall()
 
+    cursor.close()
+    conn.close()
 
     return redirect('/cart')
-
