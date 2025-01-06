@@ -203,19 +203,33 @@ def cart():
 
     cursor.execute(f"""
 
-    SELECT * FROM `Cart` WHERE `customer_id`= {customer_id}
+    SELECT `product_name`, `price`, `image_dir`, `quantity`, `Cart`.`id` 
+    FROM `Cart` 
+    JOIN `Product` 
+    ON `Cart`.`product_id` = `Product`.`product_id` 
+    WHERE `customer_id`= {customer_id}
+
     """)
+
 
     results=cursor.fetchall()
 
     cursor.close()
     conn.close()
 
-    return render_template("cart.html.jinja", products=results)
+    total=0
+    for item in results:
+        total+=(item['price']*item['quantity'])
+
+
+
+    return render_template("cart.html.jinja", products=results, total=total)
 
 @app.route('/product/<product_id>/cart', methods=["POST"])
 @flask_login.login_required
 def add_cart(product_id):
+
+
 
     quantity=request.form['quantity']
     customer_id=flask_login.current_user.id
@@ -237,3 +251,48 @@ def add_cart(product_id):
     conn.close()
 
     return redirect('/cart')
+
+
+@app.route('/cart/<id>/remove', methods=["POST", "GET"])
+@flask_login.login_required
+def remove_item(id):
+
+    conn=connect_db()
+    cursor= conn.cursor()
+
+    request.path
+
+    cursor.execute(f"""
+    
+    DELETE FROM `Cart`
+    WHERE `id` = {id}
+    """)
+
+    cursor.close()
+    conn.close()
+
+    flash("Item removed successfully")
+    return redirect("/cart")
+
+@app.route('/cart/<id>/update', methods=["POST", "GET"])
+@flask_login.login_required
+def update_quantity(id):
+
+    conn=connect_db()
+    cursor= conn.cursor()
+    
+    quantity=request.form['quantity']
+
+    cursor.execute(f"""
+    
+    UPDATE `Cart`
+    SET `quantity`= {quantity}
+    WHERE `id` = {id}
+
+    """)
+
+    cursor.close()
+    conn.close()
+
+    flash("Item Updated Succesfully")
+    return redirect("/cart")
