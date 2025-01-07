@@ -243,6 +243,8 @@ def add_cart(product_id):
     
     INSERT INTO `Cart` (`customer_id`, `product_id`, `quantity`)
     VALUES ('{customer_id}', '{product_id}', '{quantity}')
+    ON DUPLICATE KEY UPDATE
+    `quantity`=`quantity`+{quantity}
     """)
 
     results=cursor.fetchall()
@@ -280,7 +282,7 @@ def update_quantity(id):
 
     conn=connect_db()
     cursor= conn.cursor()
-    
+
     quantity=request.form['quantity']
 
     cursor.execute(f"""

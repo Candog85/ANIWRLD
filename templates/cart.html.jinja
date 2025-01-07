@@ -9,7 +9,7 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
-<body>
+<body class="text-white">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
@@ -51,13 +51,13 @@
                     </td>
                     <td></td>
                     <td class="">{{product['product_name']}}</td>
-                    <td>${{product['price']}}</td>
+                    <td>${{"%.2f" | format(product['price'])}}</td>
                     <td>
                         <form id="updateForm-{{product['id']}}" method="post" action="/cart/{{product['id']}}/update">
                             <input name="quantity" type="number" value="{{product['quantity']}}" min="1">
                         </form>
                     </td>
-                    <td>${{product['price']*product['quantity']}}</td>
+                    <td>${{"%.2f" | format(product['price']*product['quantity'])}}</td>
                     <td><button form="updateForm-{{product['id']}}" type="submit"
                             class="btn btn-primary">Update</button></td>
                     <td><a href="/cart/{{product['id']}}/remove" class="btn btn-danger">Remove</a></td>
@@ -67,7 +67,7 @@
             </tbody>
         </table>
         <h1 class="text-end h2">
-            Total = {{total}}
+            Total = {{"%.2f" | format(total)}}
         </h1>
     </div>
 

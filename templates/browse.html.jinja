@@ -10,7 +10,7 @@
     <link href="styles.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="bs-primary">
 
     {% include "components/navbar.html.jinja" %}
 
@@ -27,7 +27,7 @@
                 <img src="{{item['image_dir']}}" class="card-img-top" alt="{{item['product_name']}}">
                 <div class="card-body">
                     <h5 class="card-title">{{item["product_name"]}}</h5>
-                    <p class="card-text text-secondary">${{item['price']}}</p>
+                    <p class="card-text text-secondary">${{"%.2f" | format(item['price'])}}</p>
                     <a href="/product/{{item['product_id']}}" class="btn btn-primary">View Product</a>
                 </div>
             </div>
