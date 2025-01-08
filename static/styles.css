@@ -11,5 +11,5 @@
 }
 
 .table-primary{
-    --bs-table
+    --bs-table-bg: #5F5F5F;
 }
