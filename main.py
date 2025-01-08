@@ -214,6 +214,8 @@ def cart():
 
     results=cursor.fetchall()
 
+
+
     cursor.close()
     conn.close()
 
@@ -246,8 +248,6 @@ def add_cart(product_id):
     ON DUPLICATE KEY UPDATE
     `quantity`=`quantity`+{quantity}
     """)
-
-    results=cursor.fetchall()
 
     cursor.close()
     conn.close()
@@ -298,3 +298,29 @@ def update_quantity(id):
 
     flash("Item Updated Succesfully")
     return redirect("/cart")
+
+@app.route('/cart/<customer_id>/checkout' , methods=["POST", "GET"])
+@flask_login.login_required
+def checkout(customer_id):
+
+    customer_id=flask_login.current_user.id
+
+    conn=connect_db()
+    cursor=conn.cursor()
+
+    cursor.execute(f"""
+    
+    SELECT `product_name`, `price`, `image_dir`, `quantity`, `Cart`.`id` 
+    FROM `Cart` 
+    JOIN `Product` 
+    ON `Cart`.`product_id` = `Product`.`product_id` 
+    WHERE `customer_id`= {customer_id}
+    
+    """)
+
+    results=cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template("checkout.html.jinja", products=results,)

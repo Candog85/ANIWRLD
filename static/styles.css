@@ -1,2 +1,15 @@
-body {background-color: #5F5F5F;}
-nav {background-color: #7FC58B;}
+/* .bg-custom-primary {background-color: #5F5F5F;}
+.bg-custom-secondary {background-color: 127 197 139;} */
+
+:root, [data-bs-theme=light] {
+    --bs-primary-rgb: 95, 95, 95;
+    --bs-secondary-rgb: 127, 197, 139;
+}
+
+.table-secondary{
+    --bs-table-bg: #7FC58B;
+}
+
+.table-primary{
+    --bs-table
+}
