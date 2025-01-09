@@ -16,8 +16,6 @@ login_manager.init_app(app)
 login_manager.login_view = ('/login')
 
 
-
-
 class User:
     is_authenticated = True
     is_anonymous = False
@@ -195,11 +193,11 @@ def logout():
 @app.route('/cart')
 @flask_login.login_required
 def cart():
-    
-    conn=connect_db()
-    cursor=conn.cursor()
 
-    customer_id=flask_login.current_user.id
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    customer_id = flask_login.current_user.id
 
     cursor.execute(f"""
 
@@ -211,33 +209,27 @@ def cart():
 
     """)
 
-
-    results=cursor.fetchall()
-
-
+    results = cursor.fetchall()
 
     cursor.close()
     conn.close()
 
-    total=0
+    total = 0
     for item in results:
-        total+=(item['price']*item['quantity'])
-
-
+        total += (item['price']*item['quantity'])
 
     return render_template("cart.html.jinja", products=results, total=total)
+
 
 @app.route('/product/<product_id>/cart', methods=["POST"])
 @flask_login.login_required
 def add_cart(product_id):
 
+    quantity = request.form['quantity']
+    customer_id = flask_login.current_user.id
 
-
-    quantity=request.form['quantity']
-    customer_id=flask_login.current_user.id
-
-    conn=connect_db()
-    cursor= conn.cursor()
+    conn = connect_db()
+    cursor = conn.cursor()
 
     request.path
 
@@ -259,8 +251,8 @@ def add_cart(product_id):
 @flask_login.login_required
 def remove_item(id):
 
-    conn=connect_db()
-    cursor= conn.cursor()
+    conn = connect_db()
+    cursor = conn.cursor()
 
     request.path
 
@@ -276,14 +268,15 @@ def remove_item(id):
     flash("Item removed successfully")
     return redirect("/cart")
 
+
 @app.route('/cart/<id>/update', methods=["POST", "GET"])
 @flask_login.login_required
 def update_quantity(id):
 
-    conn=connect_db()
-    cursor= conn.cursor()
+    conn = connect_db()
+    cursor = conn.cursor()
 
-    quantity=request.form['quantity']
+    quantity = request.form['quantity']
 
     cursor.execute(f"""
     
@@ -299,28 +292,29 @@ def update_quantity(id):
     flash("Item Updated Succesfully")
     return redirect("/cart")
 
-@app.route('/cart/<customer_id>/checkout' , methods=["POST", "GET"])
+
+@app.route('/<customer_id>/checkout', methods=["POST", "GET"])
 @flask_login.login_required
 def checkout(customer_id):
 
-    customer_id=flask_login.current_user.id
+    customer_id = flask_login.current_user.id
 
-    conn=connect_db()
-    cursor=conn.cursor()
+    conn = connect_db()
+    cursor = conn.cursor()
 
-    cursor.execute(f"""
-    
-    SELECT `product_name`, `price`, `image_dir`, `quantity`, `Cart`.`id` 
-    FROM `Cart` 
-    JOIN `Product` 
-    ON `Cart`.`product_id` = `Product`.`product_id` 
-    WHERE `customer_id`= {customer_id}
-    
-    """)
+    cursor.execute(f'SELECT * FROM `Cart`')
 
-    results=cursor.fetchall()
+    cart = cursor.fetchall()
+
+    for product in cart:
+        
+        cursor.execute(f"""
+        
+        INSERT INTO `SaleProduct` (`sale_id`, `product_id`, `quantity`)
+        VALUES ({cursor.lastrowid}', '{product['product_id']}', '{product['quantity']}');
+        """)
 
     cursor.close()
     conn.close()
 
-    return render_template("checkout.html.jinja", products=results,)
+    return render_template("checkout.html.jinja", cart=cart)
