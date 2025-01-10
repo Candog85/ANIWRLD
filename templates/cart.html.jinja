@@ -29,12 +29,12 @@
     {%if products%}
 
     <div class="container col-10 table-responsive">
-        <table class="table align-middle text-center table-primary">
+        <table class="table align-middle text-center table-primary text-white">
             <thead>
                 <tr class="fs-5">
                     <th scope="col" class="col-1"></th>
                     <th></th>
-                    <th scope="col">Product</th>
+                    <th scope="col" class="">Product</th>
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Total</th>
@@ -42,7 +42,7 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="container">
 
                 {%for product in products %}
 
@@ -60,16 +60,33 @@
                     </td>
                     <td>${{"%.2f" | format(product['price']*product['quantity'])}}</td>
                     <td><button form="updateForm-{{product['id']}}" type="submit"
-                            class="btn btn-primary">Update</button></td>
+                            class="btn btn-secondary">Update</button></td>
                     <td><a href="/cart/{{product['id']}}/remove" class="btn btn-danger">Remove</a></td>
                 </tr>
 
                 {%endfor%}
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <h1 class="text-end h2 col-10">
+                            Total = {{"%.2f" | format(total)}}
+                        </h1>
+                    </td>
+                    <td>
+                        <a href="/checkout" class="btn btn-secondary">Checkout</a>
+                    </td>
+                </tr>
+
             </tbody>
         </table>
-        <h1 class="text-end h2">
-            Total = {{"%.2f" | format(total)}}
-        </h1>
+
+
     </div>
 
     {%else%}
@@ -78,7 +95,6 @@
         <a href="/browse" class="btn btn-primary col-4 my-3">Browse</a>
     </div>
     {%endif%}
-
 
 </body>
 

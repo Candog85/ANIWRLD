@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, flash, abort
 import pymysql
 from dynaconf import Dynaconf
 import flask_login
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -156,7 +157,7 @@ def signup_page():
 @app.route("/login", methods=["POST", "GET"])
 def login_page():
 
-    if flask_login.current_user.is_authenicated:
+    if flask_login.current_user.is_authenticated:
         return redirect('/')
 
     if request.method == 'POST':
@@ -184,6 +185,7 @@ def login_page():
 
 
 @app.route('/logout')
+@flask_login.login_required
 def logout():
 
     flask_login.logout_user()
@@ -293,9 +295,9 @@ def update_quantity(id):
     return redirect("/cart")
 
 
-@app.route('/<customer_id>/checkout', methods=["POST", "GET"])
+@app.route('/checkout', methods=["POST", "GET"])
 @flask_login.login_required
-def checkout(customer_id):
+def checkout():
 
     customer_id = flask_login.current_user.id
 
@@ -306,13 +308,25 @@ def checkout(customer_id):
 
     cart = cursor.fetchall()
 
+    cursor.execute(f"""
+    
+    INSERT INTO `Sale` (`customer_id`, `status`)
+    VALUES ('{customer_id}', 'pending')
+
+    """)
+
     for product in cart:
         
         cursor.execute(f"""
         
         INSERT INTO `SaleProduct` (`sale_id`, `product_id`, `quantity`)
-        VALUES ({cursor.lastrowid}', '{product['product_id']}', '{product['quantity']}');
+        VALUES ('{cursor.lastrowid}', '{product['product_id']}', '{product['quantity']}')
         """)
+
+    cursor.execute(f"""
+    
+    DELETE FROM `Cart` WHERE `customer_id` = "{customer_id}";
+    """)
 
     cursor.close()
     conn.close()
