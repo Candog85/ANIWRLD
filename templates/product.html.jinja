@@ -20,46 +20,71 @@
         <div class="col-12 my-5">
             <div class="row">
 
-                <div class="col-md-5 sticky-top">
+                <div class="col-md-4 sticky-top">
                     <img src="{{product['image_dir']}}" class="img-fluid rounded-start" alt="...">
                 </div>
 
-                <div class="col-7">
+                <div class="col-8">
 
                     <div class="text-center">
                         <h5 class="h1">{{product['product_name']}}</h5>
                         <p class="text-secondary fs-5">{{product['product_type']}}</p>
                     </div>
 
-                    <div class="mx-5 mt-5">
+                    <div class="mx-5 my-5">
                         <p class=>{{product['description']}}</p>
                     </div>
 
-                    <div class="text-center mx-5">
+                    <div class="text-center mx-5 my-5">
                         <h2 class="">${{"%.2f" | format(product['price'])}} USD</h2>
                     </div>
 
 
-                    <form method="post" action="/product/{{product['product_id']}}/cart">
+                    <form class="d-flex flex-column justify-content-center mb-5" method="post"
+                        action="/product/{{product['product_id']}}/cart">
 
-                        <div class="text-center row">
-
-                            <div class="col-8">
-                                <label for="quantity" class="form-label justify-content-start">Quantity</label>
-                                <input name="quantity" type="number" class="form-control" id="quantity" value="1"
-                                    required>
-                            </div>
-
-
-                            <div class="col-4 align-content-end">
-                                <button type="submit" class="btn btn-primary col-12">Add to cart</button>
-                            </div>
+                        <div class="text-center col-6 mx-auto mb-3">
+                            <label for="quantity" class="form-label justify-content-start">Quantity</label>
+                            <input name="quantity" type="number" class="form-control" id="quantity" value="1" required>
                         </div>
-                    </form>
 
+
+
+                        <button type="submit" class="btn btn-primary col-3 mx-auto">Add to cart</button>
+
+                    </form>
+                    <div>
+
+                        <form method="post" action="/product/{{product['product_id']}}/review" class="text-center">
+
+                            <select name="rating" class="form-select" aria-label="Default select example">
+                                <option selected>Select your rating</option>
+                                <option value="1">1★</option>
+                                <option value="2">2★</option>
+                                <option value="3">3★</option>
+                                <option value="4">4★</option>
+                                <option value="5">5★</option>
+                            </select>
+
+                            <div class="col-8 mx-auto m-3">
+                                <label for="review" class="form-label justify-content-start">Review</label>
+                                <textarea name="review" class="form-control" id="quantity" value="1"
+                                    required></textarea>
+                            </div>
+
+
+
+
+                            <div class="col-4 align-content-end mx-auto">
+                                <button type="submit" class="btn btn-primary col-12">Submit review</button>
+                            </div>
+
+                        </form>
+                    </div>
                 </div>
 
             </div>
+
 
         </div>
     </div>

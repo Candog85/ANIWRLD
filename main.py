@@ -332,3 +332,24 @@ def checkout():
     conn.close()
 
     return render_template("checkout.html.jinja", cart=cart)
+
+@app.route('/product/<product_id>/review', methods=["POST", "GET"])
+@flask_login.login_required
+def review(product_id):
+    
+    customer_id=flask_login.current_user.id
+    review_score=request.form['rating']
+    review_text=request.form['review']
+    
+    conn=connect_db()
+    cursor=conn.cursor()
+    
+
+    
+    cursor.execute(f"""
+    
+    INSERT INTO `Review` (`product_id`, `customer_id`, `review_txt`, `rating`)
+    VALUES ('{product_id}', '{customer_id}', '{review_text}', '{review_score}')
+    """)
+    
+    return redirect('')
