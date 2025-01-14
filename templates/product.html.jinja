@@ -20,8 +20,8 @@
         <div class="col-12 my-5">
             <div class="row">
 
-                <div class="col-md-4 sticky-top">
-                    <img src="{{product['image_dir']}}" class="img-fluid rounded-start" alt="...">
+                <div class="col-md-4">
+                    <img src="{{product['image_dir']}}" class="sticky-top img-fluid rounded-start" alt="...">
                 </div>
 
                 <div class="col-8">
@@ -57,21 +57,22 @@
 
                         <form method="post" action="/product/{{product['product_id']}}/review" class="text-center">
 
-                            <select name="rating" class="form-select" aria-label="Default select example">
-                                <option selected>Select your rating</option>
-                                <option value="1">1★</option>
-                                <option value="2">2★</option>
-                                <option value="3">3★</option>
-                                <option value="4">4★</option>
-                                <option value="5">5★</option>
-                            </select>
 
-                            <div class="col-8 mx-auto m-3">
-                                <label for="review" class="form-label justify-content-start">Review</label>
-                                <textarea name="review" class="form-control" id="quantity" value="1"
-                                    required></textarea>
+                            Review
+
+                            <div class="col-8 mx-auto">
+                                <select name="rating" class="form-select" aria-label="Default select example">
+                                    <option selected>Select your rating</option>
+                                    <option value="1">1★</option>
+                                    <option value="2">2★</option>
+                                    <option value="3">3★</option>
+                                    <option value="4">4★</option>
+                                    <option value="5">5★</option>
+                                </select>
                             </div>
-
+                            <div class="col-6 mx-auto m-3">
+                                <textarea name="review" class="form-control" id="quantity" value="1" placeholder="Enter Review" required></textarea>
+                            </div>
 
 
 
@@ -80,6 +81,34 @@
                             </div>
 
                         </form>
+
+                        <h1 class="my-5">Reviews:</h1>
+
+                        {%for review in reviews%}
+                        <div class="card mx-auto col-12 my-3" style="">
+                            <div class="card-body">
+                                <h5 class="card-title">{{review['username']}} -
+                                    {%if review['rating']==5 %}
+                                    ★★★★★
+                                    {% elif review['rating']==4 %}
+                                    ★★★★
+                                    {% elif review['rating']==3 %}
+                                    ★★★
+                                    {% elif review['rating']==2 %}
+                                    ★★
+                                    {% elif review['rating']==1 %}
+                                    ★
+                                    {% endif %}
+
+                                </h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary">{{review[]}}</h6>
+                                <p class="card-text">Some quick example text to build on the card title and make up the
+                                    bulk of the card's content.</p>
+                            </div>
+                        </div>
+
+                        {%endfor%}
+
                     </div>
                 </div>
 

@@ -93,19 +93,34 @@ def product_page(product_id):
     conn = connect_db()
 
     cursor = conn.cursor()
+    
+    customer_id=flask_login.current_user.id
 
     cursor.execute(
-        f"SELECT * FROM `Product` WHERE `product_id` = {product_id};")
+        f"SELECT * FROM `Product` WHERE `product_id` = '{product_id}'")
 
     result = cursor.fetchone()
 
     if result is None:
         abort(404)
 
+    cursor.execute(f"""
+    
+    SELECT `Customer`.`id`,`username`, `review_txt`, `rating`
+    FROM `Review`
+    JOIN `Customer`
+    ON `Customer`.`id` = `Review`.`customer_id`
+    WHERE `product_id`= '{product_id}'
+    
+    """)
+    
+    reviews=cursor.fetchall()
+
     cursor.close()
     conn.close()
 
-    return render_template("product.html.jinja", product=result)
+
+    return render_template("product.html.jinja", product=result, reviews=reviews)
 
 
 @app.route("/signup", methods=["POST", "GET"])
@@ -352,4 +367,4 @@ def review(product_id):
     VALUES ('{product_id}', '{customer_id}', '{review_text}', '{review_score}')
     """)
     
-    return redirect('')
+    return redirect(f'/product/{product_id}')
