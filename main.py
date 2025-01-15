@@ -359,12 +359,12 @@ def review(product_id):
     conn=connect_db()
     cursor=conn.cursor()
     
-
-    
     cursor.execute(f"""
     
     INSERT INTO `Review` (`product_id`, `customer_id`, `review_txt`, `rating`)
     VALUES ('{product_id}', '{customer_id}', '{review_text}', '{review_score}')
+    ON DUPLICATE KEY UPDATE
+    `review_txt`='{review_text}', `rating`='{review_score}'
     """)
     
     return redirect(f'/product/{product_id}')

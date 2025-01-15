@@ -71,7 +71,8 @@
                                 </select>
                             </div>
                             <div class="col-6 mx-auto m-3">
-                                <textarea name="review" class="form-control" id="quantity" value="1" placeholder="Enter Review" required></textarea>
+                                <textarea name="review" class="form-control" id="quantity" value="1"
+                                    placeholder="Enter Review" required></textarea>
                             </div>
 
 
@@ -82,6 +83,7 @@
 
                         </form>
 
+                        {%if reviews%}
                         <h1 class="my-5">Reviews:</h1>
 
                         {%for review in reviews%}
@@ -102,13 +104,14 @@
 
                                 </h5>
                                 <h6 class="card-subtitle mb-2 text-body-secondary">{{review[]}}</h6>
-                                <p class="card-text">Some quick example text to build on the card title and make up the
-                                    bulk of the card's content.</p>
+                                <p class="card-text">{{review['review_txt']}}.</p>
                             </div>
                         </div>
 
                         {%endfor%}
-
+                        {%else%}
+                        <h1 class="my-5">There are no reviews posted currently!</h1>
+                        {%endif%}
                     </div>
                 </div>
 
