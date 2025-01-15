@@ -93,8 +93,6 @@ def product_page(product_id):
     conn = connect_db()
 
     cursor = conn.cursor()
-    
-    customer_id=flask_login.current_user.id
 
     cursor.execute(
         f"SELECT * FROM `Product` WHERE `product_id` = '{product_id}'")
@@ -105,20 +103,19 @@ def product_page(product_id):
         abort(404)
 
     cursor.execute(f"""
-    
+
     SELECT `Customer`.`id`,`username`, `review_txt`, `rating`
     FROM `Review`
     JOIN `Customer`
     ON `Customer`.`id` = `Review`.`customer_id`
     WHERE `product_id`= '{product_id}'
-    
+
     """)
-    
-    reviews=cursor.fetchall()
+
+    reviews = cursor.fetchall()
 
     cursor.close()
     conn.close()
-
 
     return render_template("product.html.jinja", product=result, reviews=reviews)
 
@@ -126,8 +123,6 @@ def product_page(product_id):
 @app.route("/signup", methods=["POST", "GET"])
 def signup_page():
 
-    if flask_login.current_user.is_authenicated:
-        return redirect('/')
 
     if request.method == "POST":
         full_name = request.form['full_name']
@@ -218,10 +213,10 @@ def cart():
 
     cursor.execute(f"""
 
-    SELECT `product_name`, `price`, `image_dir`, `quantity`, `Cart`.`id` 
-    FROM `Cart` 
-    JOIN `Product` 
-    ON `Cart`.`product_id` = `Product`.`product_id` 
+    SELECT `product_name`, `price`, `image_dir`, `quantity`, `Cart`.`id`
+    FROM `Cart`
+    JOIN `Product`
+    ON `Cart`.`product_id` = `Product`.`product_id`
     WHERE `customer_id`= {customer_id}
 
     """)
@@ -251,7 +246,7 @@ def add_cart(product_id):
     request.path
 
     cursor.execute(f"""
-    
+
     INSERT INTO `Cart` (`customer_id`, `product_id`, `quantity`)
     VALUES ('{customer_id}', '{product_id}', '{quantity}')
     ON DUPLICATE KEY UPDATE
@@ -274,7 +269,7 @@ def remove_item(id):
     request.path
 
     cursor.execute(f"""
-    
+
     DELETE FROM `Cart`
     WHERE `id` = {id}
     """)
@@ -296,7 +291,7 @@ def update_quantity(id):
     quantity = request.form['quantity']
 
     cursor.execute(f"""
-    
+
     UPDATE `Cart`
     SET `quantity`= {quantity}
     WHERE `id` = {id}
@@ -324,22 +319,22 @@ def checkout():
     cart = cursor.fetchall()
 
     cursor.execute(f"""
-    
+
     INSERT INTO `Sale` (`customer_id`, `status`)
     VALUES ('{customer_id}', 'pending')
 
     """)
 
     for product in cart:
-        
+
         cursor.execute(f"""
-        
+
         INSERT INTO `SaleProduct` (`sale_id`, `product_id`, `quantity`)
         VALUES ('{cursor.lastrowid}', '{product['product_id']}', '{product['quantity']}')
         """)
 
     cursor.execute(f"""
-    
+
     DELETE FROM `Cart` WHERE `customer_id` = "{customer_id}";
     """)
 
@@ -350,23 +345,29 @@ def checkout():
 
     return redirect('/cart')
 
+
 @app.route('/product/<product_id>/review', methods=["POST", "GET"])
-@flask_login.login_required
 def review(product_id):
+
+    if flask_login.current_user.is_authenticated == False:
+        flash("You must be logged in to post a review")
+        return redirect("/login")
     
-    customer_id=flask_login.current_user.id
-    review_score=request.form['rating']
-    review_text=request.form['review']
-    
-    conn=connect_db()
-    cursor=conn.cursor()
-    
-    cursor.execute(f"""
-    
-    INSERT INTO `Review` (`product_id`, `customer_id`, `review_txt`, `rating`)
-    VALUES ('{product_id}', '{customer_id}', '{review_text}', '{review_score}')
-    ON DUPLICATE KEY UPDATE
-    `review_txt`='{review_text}', `rating`='{review_score}'
-    """)
-    
-    return redirect(f'/product/{product_id}')
+    else:
+
+        customer_id=flask_login.current_user.id
+        review_score=request.form['rating']
+        review_text=request.form['review']
+
+        conn=connect_db()
+        cursor=conn.cursor()
+        
+        cursor.execute(f"""
+        
+        INSERT INTO `Review` (`product_id`, `customer_id`, `review_txt`, `rating`)
+        VALUES ('{product_id}', '{customer_id}', '{review_text}', '{review_score}')
+        ON DUPLICATE KEY UPDATE
+        `review_txt`='{review_text}', `rating`='{review_score}'
+        """)
+        
+        return redirect(f'/product/{product_id}')

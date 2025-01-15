@@ -3,11 +3,19 @@
 }
 
 :root{
-    --bs-primary-rgb: 61,61,61;
+    --primary: #3d3d3d;
+    --secondary: #67be76;
+    --primary-rgb: 61, 61, 61;
+    --secondary-rgb: 103, 190, 118;
+
+    
+    --bs-primary-rgb: 61, 61, 61;
+    --bs-primary-bg-rg: 61, 61, 61;
     --bs-secondary-rgb: 103, 190, 118;
     --bs-secondary-bg-rgb: 103, 190, 118;
     --bs-body-bg: #3d3d3d;
     --bs-body-color: #ffffff;
+    --bs-emphasis-color-rgb: 103, 190, 118;
 }
 
 .table-primary{
