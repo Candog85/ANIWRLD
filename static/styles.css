@@ -6,6 +6,8 @@
     --bs-primary-rgb: 61,61,61;
     --bs-secondary-rgb: 103, 190, 118;
     --bs-secondary-bg-rgb: 103, 190, 118;
+    --bs-body-bg: #3d3d3d;
+    --bs-body-color: #ffffff;
 }
 
 .table-primary{

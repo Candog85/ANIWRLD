@@ -55,7 +55,7 @@
                     <td>${{"%.2f" | format(product['price'])}}</td>
                     <td>
                         <form id="updateForm-{{product['id']}}" method="post" action="/cart/{{product['id']}}/update">
-                            <input name="quantity" type="number" value="{{product['quantity']}}" min="1">
+                            <input class="form-control" name="quantity" type="number" value="{{product['quantity']}}" min="1">
                         </form>
                     </td>
                     <td>${{"%.2f" | format(product['price']*product['quantity'])}}</td>

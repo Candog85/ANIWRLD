@@ -346,7 +346,9 @@ def checkout():
     cursor.close()
     conn.close()
 
-    return render_template("checkout.html.jinja", cart=cart)
+    flash("Succesfully placed order")
+
+    return redirect('/cart')
 
 @app.route('/product/<product_id>/review', methods=["POST", "GET"])
 @flask_login.login_required
