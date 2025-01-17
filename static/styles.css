@@ -39,3 +39,7 @@
 .bg-body-secondary{
     --background-color: #67be76;
 }
+
+::placeholder {
+    color: white;
+}

@@ -152,7 +152,7 @@ def signup_page():
             """)
 
         except pymysql.err.IntegrityError:
-            flash("Your email/username already", 'error')
+            flash("Your email or username already exists!", 'error')
 
         else:
             return redirect("/login")
