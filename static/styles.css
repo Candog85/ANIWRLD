@@ -43,3 +43,7 @@
 ::placeholder {
     color: white;
 }
+
+.form-floating>.form-control:focus~label{
+    color: white;
+}

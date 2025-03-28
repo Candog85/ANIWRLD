@@ -74,7 +74,7 @@ def browse():
     cursor = conn.cursor()
 
     if query is None:
-        cursor.execute("SELECT * FROM `Product`;")
+        cursor.execute("SELECT * FROM `Product`;") 
     else:
         cursor.execute(
             f"SELECT * FROM `Product` WHERE `product_name` LIKE '%{query}%';")
