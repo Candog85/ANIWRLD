@@ -345,7 +345,6 @@ def checkout():
 
     return redirect('/cart')
 
-
 @app.route('/product/<product_id>/review', methods=["POST", "GET"])
 def review(product_id):
 
